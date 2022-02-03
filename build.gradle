@@ -1,0 +1,84 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group 'com.softwareverde'
+version '0.0.0'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation  group: 'com.softwareverde',  name: 'java-util',              version: 'v2.7.3'
+    implementation  group: 'com.softwareverde',  name: 'java-concurrent',        version: 'v1.0.1'
+    implementation (group: 'com.softwareverde',  name: 'java-cryptography') {     version { strictly 'v3.2.1' } }
+    implementation  group: 'com.github.softwareverde',  name: 'json',            version: 'v2.0.0'
+    implementation  group: 'com.softwareverde',  name: 'java-db',                version: 'v3.3.0'
+    implementation (group: 'com.softwareverde',  name: 'java-http-client') {     version { strictly 'v2.2.5' } }
+    implementation  group: 'com.softwareverde',  name: 'http-servlet',           version: 'v3.2.0'
+    implementation  group: 'com.softwareverde',  name: 'java-logging',  version: 'v2.3.0'
+    implementation  group: 'com.softwareverde',  name: 'java-util',     version: 'v2.7.3'
+    implementation  group: 'com.softwareverde',  name: 'http-servlet',  version: 'v3.3.1'
+    implementation  group: 'com.softwareverde',  name: 'java-socket',   version: 'v0.2.3'
+    // implementation  group: 'com.softwareverde',  name: 'bitcoin-verde', version: '460bd5a1'
+
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
+}
+
+task copyDependencies(type: Copy) {
+    from (configurations.compileClasspath + configurations.runtimeClasspath)
+    into "$buildDir/libs/libs"
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+task makeJar(type: Jar) {
+    manifest {
+        attributes  'Implementation-Title': 'Monetize Dot Cash Server',
+                'Implementation-Version': archiveVersion,
+                'Main-Class': 'com.softwareverde.monetize.Main',
+                'Class-Path': (project.configurations.compileClasspath + configurations.runtimeClasspath).collect { 'libs/' + it.getName() }.join(' ')
+    }
+
+    archiveBaseName = project.name
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from sourceSets.main.output
+
+    with jar
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

@@ -245,6 +245,48 @@
         });
     };
 
+    const appendMonetizationParameters = function(srcUrl, blockParameters) {
+        const parameterName = "Monetization";
+
+        let url = null;
+        try {
+            url = new URL(srcUrl);
+        }
+        catch (exception) {
+            let httpUrl = window.location.origin;
+            if ( (! httpUrl.endsWith("/")) && (! srcUrl.startsWith("/")) ) {
+                httpUrl += "/";
+            }
+
+            url = new URL(httpUrl + srcUrl); // URL requires an absolute url...
+        }
+
+        const searchParams = url.searchParams;
+
+        searchParams.set(parameterName, JSON.stringify(blockParameters));
+        return url.toString();
+    };
+
+    const loadElement = function(element, subscription, shareDifficulty, minerNotify) {
+        subscription = (subscription || window.Monetize.state.subscription);
+        const blockParameters = window.Monetize.mineBlock(subscription, shareDifficulty, minerNotify);
+
+        const monetizeSrc = element.getAttribute("monetize-src");
+        const monetizeHref = element.getAttribute("monetize-href");
+
+        if (monetizeSrc) {
+            const newUrl = appendMonetizationParameters(monetizeSrc, blockParameters);
+            element.setAttribute("src", newUrl);
+        }
+        else if (monetizeHref) {
+            const newUrl = appendMonetizationParameters(monetizeHref, blockParameters);
+            element.setAttribute("href", newUrl);
+        }
+
+        element.setAttribute("monetize-src", null);
+        element.setAttribute("monetize-href", null);
+    };
+
     const monetize = {
         state: { },
 
@@ -254,7 +296,9 @@
 
         hashMerkleRoot: hashMerkleRoot,
         hashBlock: hashBlock,
-        mineBlock: mineBlock
+        mineBlock: mineBlock,
+        loadElement: loadElement,
+        appendMonetizationParameters: appendMonetizationParameters
     };
 
     window.Monetize = monetize;
@@ -265,18 +309,30 @@ window.setTimeout(function() {
         window.Monetize.state.subscription = subscription;
 
         window.Monetize.Api.getWork(subscription.id, function(shareDifficulty, minerNotify) {
-            const blockParameters = window.Monetize.mineBlock(subscription, shareDifficulty, minerNotify);
+            const hrefElements = document.querySelectorAll("[monetize-href]");
+            const srcElements = document.querySelectorAll("[monetize-src]");
 
-            const headers = {
-                "Monetization": JSON.stringify(blockParameters)
-            };
-            Http.getRaw("/js/main.js", { }, function(data) {
-                data.text().then(function(script) {
-                    const scriptElement = document.createElement("script");
-                    scriptElement.innerHTML = script;
-                    document.body.appendChild(scriptElement);
-                });
-            }, headers);
+            for (let i = 0; i < hrefElements.length; i += 1) {
+                const element = hrefElements[i];
+                try {
+                    window.Monetize.loadElement(element, subscription, shareDifficulty, minerNotify);
+                }
+                catch (exception) {
+                    console.log(element, exception);
+                }
+            }
+
+            for (let i = 0; i < srcElements.length; i += 1) {
+                const element = srcElements[i];
+                try {
+                    window.Monetize.loadElement(element, subscription, shareDifficulty, minerNotify);
+                }
+                catch (exception) {
+                    console.log(element, exception);
+                }
+            }
+
+            window.dispatchEvent(new Event("load"));
         });
     });
 }, 0);

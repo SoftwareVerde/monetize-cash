@@ -1,6 +1,8 @@
 package com.softwareverde.http.server.servlet;
 
 import com.softwareverde.bitcoin.server.module.stratum.BitcoinCoreStratumServer;
+import com.softwareverde.http.querystring.GetParameters;
+import com.softwareverde.http.querystring.PostParameters;
 import com.softwareverde.http.server.servlet.request.Headers;
 import com.softwareverde.http.server.servlet.request.Request;
 import com.softwareverde.http.server.servlet.response.Response;
@@ -64,7 +66,7 @@ public class MonetizedServlet extends DirectoryServlet {
         return false;
     }
 
-    protected Response _getInvalidPaymentResponse() {
+    protected Response _createInvalidPaymentResponse() {
         final Integer paymentRequiredCode = 402;
 
         final Json jsonResponse = new Json(false);
@@ -78,6 +80,40 @@ public class MonetizedServlet extends DirectoryServlet {
         response.setHeader(Response.Headers.CONTENT_TYPE, "application/json");
 
         return response;
+    }
+
+    protected Json _getWorkerSubmitMessage(final Request request) {
+        final GetParameters getParameters = request.getGetParameters();
+        if (getParameters.containsKey(MonetizedServlet.HEADER_NAME)) {
+            final String stringValue = getParameters.get(MonetizedServlet.HEADER_NAME);
+            final Json workerSubmitMessage = Json.parse(stringValue);
+            if (workerSubmitMessage.isArray() && workerSubmitMessage.length() > 0) {
+                return workerSubmitMessage;
+            }
+        }
+
+        final PostParameters postParameters = request.getPostParameters();
+        if (postParameters.containsKey(MonetizedServlet.HEADER_NAME)) {
+            final String stringValue = postParameters.get(MonetizedServlet.HEADER_NAME);
+            final Json workerSubmitMessage = Json.parse(stringValue);
+            if (workerSubmitMessage.isArray() && workerSubmitMessage.length() > 0) {
+                return workerSubmitMessage;
+            }
+        }
+
+        final Headers headers = request.getHeaders();
+        if (headers.containsHeader(MonetizedServlet.HEADER_NAME)) {
+            final List<String> headerValues = headers.getHeader(MonetizedServlet.HEADER_NAME);
+            if (! headerValues.isEmpty()) {
+                final String headerValue = headerValues.get(0);
+                final Json workerSubmitMessage = Json.parse(headerValue);
+                if (workerSubmitMessage.isArray() && workerSubmitMessage.length() > 0) {
+                    return workerSubmitMessage;
+                }
+            }
+        }
+
+        return null;
     }
 
     public MonetizedServlet(final File directory, final BitcoinCoreStratumServer stratumServer) {
@@ -95,22 +131,14 @@ public class MonetizedServlet extends DirectoryServlet {
             return super.onRequest(request);
         }
 
-        final Headers headers = request.getHeaders();
-        if (! headers.containsHeader(MonetizedServlet.HEADER_NAME)) {
-            return _getInvalidPaymentResponse();
+        final Json workerSubmitMessage = _getWorkerSubmitMessage(request);
+        if (workerSubmitMessage == null) {
+            return _createInvalidPaymentResponse();
         }
-
-        final List<String> headerValues = headers.getHeader(MonetizedServlet.HEADER_NAME);
-        if (headerValues.isEmpty()) {
-            return _getInvalidPaymentResponse();
-        }
-        final String headerValue = headerValues.get(0);
-        final Json workerSubmitMessage = Json.parse(headerValue);
-        Logger.debug(workerSubmitMessage);
 
         final Boolean isValidShare = _stratumServer.submitShare(workerSubmitMessage);
         if (! isValidShare) {
-            return _getInvalidPaymentResponse();
+            return _createInvalidPaymentResponse();
         }
 
         return super.onRequest(request);

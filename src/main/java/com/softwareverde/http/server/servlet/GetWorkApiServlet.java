@@ -24,7 +24,7 @@ public class GetWorkApiServlet implements Servlet {
         _stratumServer = stratumServer;
         _subscriptionMinerIds = subscriptionMinerIds;
 
-        final long multiplier = (long) Math.pow(2, 16);
+        final long multiplier = (long) Math.pow(2, 18);
         _shareDifficulty = Difficulty.BASE_DIFFICULTY.multiplyBy(multiplier);
         _stratumServer.invertDifficulty(true);
         _stratumServer.setShareDifficulty(multiplier);

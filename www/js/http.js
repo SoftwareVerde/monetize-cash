@@ -38,7 +38,7 @@ class Http {
         return postParameters;
     }
 
-    static _send(method, url, headers, getQueryString, rawPostData, callbackFunction) {
+    static _send(method, url, headers, getQueryString, rawPostData, callbackFunction, parseJsonResponse) {
         const request = new Request(
             url + (getQueryString? ("?" + getQueryString) : ""),
             {
@@ -51,6 +51,10 @@ class Http {
 
         window.fetch(request, { credentials: "same-origin" })
             .then(function(response) {
+                if (! parseJsonResponse) {
+                    return response.blob();
+                }
+
                 const contentType = (response.headers.get("content-type") || "");
                 if (contentType.includes("application/json")) {
                     return response.json();
@@ -74,16 +78,21 @@ class Http {
 
     static get(url, getData, callbackFunction, headers) {
         headers = (headers || { });
-        Http._send("GET", url, headers, Http._jsonToQueryString(getData), null, callbackFunction);
+        Http._send("GET", url, headers, Http._jsonToQueryString(getData), null, callbackFunction, true);
+    }
+
+    static getRaw(url, getData, callbackFunction, headers) {
+        headers = (headers || { });
+        Http._send("GET", url, headers, Http._jsonToQueryString(getData), null, callbackFunction, false);
     }
 
     static post() { // Params: url, getData, postData, callbackFunction
         const postParameters = Http._getPostParameters(arguments);
-        Http._send("POST", postParameters.url, { }, Http._jsonToQueryString(postParameters.getData), Http._jsonToQueryString(postParameters.postData), postParameters.callbackFunction);
+        Http._send("POST", postParameters.url, { }, Http._jsonToQueryString(postParameters.getData), Http._jsonToQueryString(postParameters.postData), postParameters.callbackFunction, true);
     }
 
     static postJson() { // Params: url, getData, postData, callbackFunction
         const postParameters = Http._getPostParameters(arguments);
-        Http._send("POST", postParameters.url, { }, Http._jsonToQueryString(postParameters.getData), postParameters.postData, postParameters.callbackFunction);
+        Http._send("POST", postParameters.url, { }, Http._jsonToQueryString(postParameters.getData), postParameters.postData, postParameters.callbackFunction, true);
     }
 }

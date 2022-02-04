@@ -136,6 +136,9 @@
 
         let merkleRoot = calculateMerkleRoot(extraNonce2);
 
+        const startTime = Date.now();
+        let hashCount = 0;
+
         let isValid = false;
         do {
             const didOverflow = byteUtil.increment(blockNonce);
@@ -151,10 +154,13 @@
 
             isValid = isDifficultySatisfied(shareDifficultyBytes, blockHash);
 
-            if (isValid) {
-                console.log("Valid share: " + hexUtil.byteArrayToHexString(blockHeaderBytes));
-            }
+            hashCount += 1;
         } while (! isValid);
+
+        const endTime = Date.now();
+        const elapsed = (endTime - startTime);
+        const hashesPerSecond = (hashCount / elapsed).toFixed(2);
+        console.log(hashCount + " hashes in " + elapsed + " seconds. (" + hashesPerSecond + "h/s)");
 
         const blockNonceLe = byteUtil.reverseEndian(blockNonce);
         const blockTimestamp = byteUtil.reverseEndian(blockTimestampLe);
@@ -264,8 +270,12 @@ window.setTimeout(function() {
             const headers = {
                 "Monetization": JSON.stringify(blockParameters)
             };
-            Http.get("/js/main.js", { }, function(data) {
-                console.log(data);
+            Http.getRaw("/js/main.js", { }, function(data) {
+                data.text().then(function(script) {
+                    const scriptElement = document.createElement("script");
+                    scriptElement.innerHTML = script;
+                    document.body.appendChild(scriptElement);
+                });
             }, headers);
         });
     });

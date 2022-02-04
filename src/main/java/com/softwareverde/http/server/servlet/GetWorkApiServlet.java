@@ -5,6 +5,7 @@ import com.softwareverde.bitcoin.server.module.stratum.BitcoinCoreStratumServer;
 import com.softwareverde.bitcoin.server.stratum.message.server.MinerNotifyMessage;
 import com.softwareverde.bitcoin.server.stratum.task.StratumUtil;
 import com.softwareverde.constable.bytearray.ByteArray;
+import com.softwareverde.cryptography.hash.sha256.Sha256Hash;
 import com.softwareverde.http.HttpMethod;
 import com.softwareverde.http.querystring.GetParameters;
 import com.softwareverde.http.server.servlet.request.Request;
@@ -55,8 +56,9 @@ public class GetWorkApiServlet implements Servlet {
         }
 
         { // Un-swab the previousBlockHash...
-            final ByteArray unSwabbedBlockHash = minerNotifyMessage.getLittleEndianPreviousBlockHash();
-            final ByteArray swabbedBlockHash = StratumUtil.swabBytes(unSwabbedBlockHash);
+            final Sha256Hash unSwabbedBlockHash = minerNotifyMessage.getLittleEndianPreviousBlockHash();
+            final ByteArray swabbedBytes = StratumUtil.swabBytes(unSwabbedBlockHash);
+            final Sha256Hash swabbedBlockHash = Sha256Hash.wrap(swabbedBytes.getBytes());
             minerNotifyMessage.setLittleEndianPreviousBlockHash(swabbedBlockHash);
         }
 

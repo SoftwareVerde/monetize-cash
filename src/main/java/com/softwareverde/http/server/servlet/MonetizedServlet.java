@@ -1,6 +1,10 @@
 package com.softwareverde.http.server.servlet;
 
 import com.softwareverde.bitcoin.server.module.stratum.BitcoinCoreStratumServer;
+import com.softwareverde.concurrent.ConcurrentHashSet;
+import com.softwareverde.constable.bytearray.ByteArray;
+import com.softwareverde.cryptography.hash.sha256.Sha256Hash;
+import com.softwareverde.cryptography.util.HashUtil;
 import com.softwareverde.http.querystring.GetParameters;
 import com.softwareverde.http.querystring.PostParameters;
 import com.softwareverde.http.server.servlet.request.Headers;
@@ -8,6 +12,9 @@ import com.softwareverde.http.server.servlet.request.Request;
 import com.softwareverde.http.server.servlet.response.Response;
 import com.softwareverde.json.Json;
 import com.softwareverde.logging.Logger;
+import com.softwareverde.util.ByteUtil;
+import com.softwareverde.util.HexUtil;
+import com.softwareverde.util.StringUtil;
 import com.softwareverde.util.Util;
 
 import java.io.File;
@@ -53,6 +60,8 @@ public class MonetizedServlet extends DirectoryServlet {
         }
     }
 
+    protected final Integer _maxSubmittedShareHistory = 1048576;
+    protected final ConcurrentHashSet<Object> _submittedShares = new ConcurrentHashSet<>();
     protected final BitcoinCoreStratumServer _stratumServer;
     protected final HashSet<EndpointMatcher> _freeEndpoints = new HashSet<>();
 
@@ -116,6 +125,33 @@ public class MonetizedServlet extends DirectoryServlet {
         return null;
     }
 
+    protected Sha256Hash _calculateShareIdentifier(final Json workerSubmitMessage) {
+        final String workerUsername = workerSubmitMessage.getString(0); // Unused.
+        final String taskIdHex = workerSubmitMessage.getString(1);
+        final String stratumExtraNonce2 = workerSubmitMessage.getString(2);
+        final String stratumTimestamp = workerSubmitMessage.getString(3);
+        final String stratumNonce = workerSubmitMessage.getString(4);
+
+        // Put the parameters into their canonical form to prevent reusing malleable shares...
+        final Long taskId = ByteUtil.bytesToLong(HexUtil.hexStringToByteArray(taskIdHex));
+        final ByteArray extraNonce2 = ByteArray.wrap(HexUtil.hexStringToByteArray(stratumExtraNonce2));
+        final Long nonce = ByteUtil.bytesToLong(HexUtil.hexStringToByteArray(stratumNonce));
+        final Long timestamp = ByteUtil.bytesToLong(HexUtil.hexStringToByteArray(stratumTimestamp));
+
+        final String canonicalMessage;
+        {
+            final Json canonicalMessageJson = new Json(true);
+            canonicalMessageJson.add(taskId);
+            canonicalMessageJson.add(extraNonce2);
+            canonicalMessageJson.add(nonce);
+            canonicalMessageJson.add(timestamp);
+            canonicalMessage = canonicalMessageJson.toString();
+        }
+
+        final ByteArray canonicalMessageBytes = ByteArray.wrap(StringUtil.stringToBytes(canonicalMessage));
+        return HashUtil.sha256(canonicalMessageBytes);
+    }
+
     public MonetizedServlet(final File directory, final BitcoinCoreStratumServer stratumServer) {
         super(directory);
         _stratumServer = stratumServer;
@@ -133,12 +169,25 @@ public class MonetizedServlet extends DirectoryServlet {
 
         final Json workerSubmitMessage = _getWorkerSubmitMessage(request);
         if (workerSubmitMessage == null) {
+            Logger.debug("Payment required: " + request.getFilePath());
             return _createInvalidPaymentResponse();
         }
 
         final Boolean isValidShare = _stratumServer.submitShare(workerSubmitMessage);
         if (! isValidShare) {
+            Logger.debug("Payment required: " + request.getFilePath());
             return _createInvalidPaymentResponse();
+        }
+
+        final Sha256Hash shareIdentifier = _calculateShareIdentifier(workerSubmitMessage);
+        final boolean isUnique = _submittedShares.add(shareIdentifier);
+        if (! isUnique) {
+            Logger.debug("Payment required: " + request.getFilePath());
+            return _createInvalidPaymentResponse();
+        }
+
+        if (_submittedShares.size() >= _maxSubmittedShareHistory) {
+            _submittedShares.clear();
         }
 
         return super.onRequest(request);

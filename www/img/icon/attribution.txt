@@ -1,0 +1,8 @@
+All icons obtained via thenounproject.com and are licensed under CCBY (//creativecommons.org/licenses/by/3.0/us/legalcode).
+
+Icon Authors:
+    shield.svg:     //thenounproject.com/rebelsaeful
+    blocks.svg:     //thenounproject.com/jhun.capaya
+    pickaxe.svg:    //thenounproject.com/nociconist
+    speed.svg:      //thenounproject.com/coquet_adrien
+

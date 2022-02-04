@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+        <link rel="icon" type="image/png" sizes="32x32" monetize-href="/img/icon-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" monetize-href="/img/icon-16.png" />
+        <link rel="shortcut icon" type="image/png" sizes="32x32" monetize-href="/img/icon-32.png" />
+        <link rel="shortcut icon" type="image/png" sizes="16x16" monetize-href="/img/icon-16.png" />
+
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="stylesheet" monetize-href="/css/main.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400&display=swap" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <script type="text/javascript" monetize-src="/js/main.js"></script>
+
+        <title>Bitcoin Verde</title>
+    </head>
+    <body>
+        <nav id="navigation">
+            <ul>
+                <li><a href="/index.html#home">Home</a></li>
+                <li><a href="/index.html#mission">Mission</a></li>
+                <li><a href="/index.html#explorer">Explorer</a></li>
+                <li><a href="#goals-head">Goals</a></li>
+                <li><a href="/index.html#system-requirements">System Requirements</a></li>
+                <li><a href="//donate.bitcoinverde.org">Donate</a></li>
+            </ul>
+        </nav>
+        <section class="clearfix" id="goals-head">
+            <div class="about-header">
+                <h1>Our Goals</h1>
+            </div>
+        </section>
+
+        <div class="bar-wrapper">
+            <div class="fadeinleft bar"></div>
+        </div>
+
+        <section class="clearfix" id="goals">
+            <p class="focus">Bitcoin Verde is constantly being evaluated to ensure we're staying competitive, up-to-date, and providing real value to the Network. Check out our roadmap to see what's under development and what's been complete below.</p>
+            <br />
+            <div class="clearfix" id="roadmap">
+                <h2 class="about-section-title">2021</h2>
+                    <p class="focus">Bitcoin Verde's 2021 Flipstarter has been funded.</p>
+                    <p class="focus">We're very excited to begin work on our next development cycle.  In our 2021 Flipstarter we've outlined 6 primary changes and features we believe will provide the most immediate value to our implementation and community.  The primary focus of these changes are centered around increasing the viability for network operators to choose Bitcoin Verde as their node software and increase retail adoption through improvements to the network.</p>
+                <ul>
+                    <li><a href="#rpc">RPC compatibility</a></li>
+                    <li><a href="#utxo">UTXO Commitments</a></li>
+                    <li><a href="#">Double spend proofs</a></li>
+                    <li><a href="#fulcrum">Electron Cash compatibility</a></li>
+                    <li><a href="#pruning">Pruning mode</a></li>
+                    <li><a href="#pool">Complete mining pool software</a></li>
+                </ul>
+            </div>
+            <h2 class="year">2020</h2>
+            <p class="focus">Bitcoin Verde has completed our 2020 Flipstarter with all development goals met. This achievement has resulted in 4 primary changes/upgrades to our implementation.</p>
+            <ul class="focus">
+                <li><a href="#block-temp">The BitBalancer - A Block Template Validation Service</a></li>
+                <li><a href="#non-indexing">Bitcoin Verde's Non-indexing Module</a></li>
+                <li><a href="#memo">Bitcoin Verde Explorer Modifications: Adding Memo Support</a></li>
+                <li><a href="#testnet">Testnet Configuration Implemented</a></li>
+            </ul>
+        </section>
+
+        <section class="clearfix" id="under-development">
+            <h2>Under Development</h2>
+            <div class="clearfix feature">
+                <div class="about-section">
+                    <div class="feature" id="rpc">
+                        <h3>RPC Compatibility</h3>
+                        <p>This extension is to expand support to the full Bitcoin JSON-RPC protocol, allowing Bitcoin Verde to become a drop-in replacement for other nodes when supporting services.</p>
+                        <p>Bitcoin Verde's default RPC API is a custom API, not compatible with the traditional Bitcoin JSON-RPC API.  Our implementation's lack of JSON-RPC compatibility has created a barrier between our client, business owners, and developers as the unfamiliarity with the current custom RPC API makes Bitcoin Verde difficult to use even for seasoned users. Improving our implementation to be fully compatible with Bitcoin Core JSON-RPC will allow users to more easily setup, connect to, and begin using a Bitcoin Verde node to support the backend of their service.</p>
+                    </div>
+                    <div class="feature" id="pruning">
+                        <h3>Pruning Mode</h3>
+                        <p>A pruning mode will provide Bitcoin Verde operators the ability to substantially reduce the storage requirements for running their Bitcoin Verde node. When implemented, pruning mode will provide a configuration option to trim blocks of a predetermined depth once their contents have been validated.</p>
+                        <p>Pruning mode is widely supported by other nodes of the network and working to enable it allows Bitcoin Verde to provide a competitive client for node operators with limited storage. We hope this reduction in resources can serve to further reduce the barriers for new operators joining the network.</p>
+                    </div>
+                    <div class="feature" id="utxo">
+                        <h3>UTXO Commitments</h3>
+                        <p>In order to verify incoming transactions a node must first be able to recreate the current UTXO state. To do so, the node downloads the entire history of the blockchain--often referred to as the “initial block download” (IBD). With this process taking up to a day, this requirement has proven to be a major barrier to entry.</p>
+                        <p>By providing a validated hash of the UTXO-set at the time a block was created, UTXO commitments can be used to greatly reduce the time required to synchronize a node on startup. Functionally, this may be particularly useful for businesses interested in running their own node and for developers under time constraints. An example of this is the recent CoinParty Hackathon, where developers wanted to run a node for testing, but had limited time to set up.</p>
+                        <p>The addition of compatible UTXO Commitments with BCHD will serve to strengthen Bitcoin Cash's utility as we work to further reduce all barriers of entry.</p>
+                    </div>
+                    <div class="feature" id="proofs">
+                        <h3>Double Spend Proofs</h3>
+                        <p>Double spend proofs provide an elevated user experience by increasing merchants' and wallet-users' willingness to accept unconfirmed transactions. This works by allowing nodes to send and receive a small, standardized message with proof that a sender has signed two separate transactions in an attempt to spend the same BCH twice. This proof can then be further validated by other nodes and users of the network to verify its claim.</p>
+                    </div>
+                    <div class="feature" id="fulcrum">
+                        <h3>Electron Cash (FULCRUM API) Compatibility</h3>
+                        <p>Bitcoin Verde will be upgraded to be fully compatible with the Electrum Cash 1.4.4 protocol. The Fulcrum API is a drop in replacement for ElectrumX/ElectronX and is fully compatible at the protocol level with Electrum Cash.</p>
+                        <p>Implementing this functionality will allow Bitcoin Verde to run as an Electron Cash SPV Server, enabling users with electron wallets to connect and communicate with Bitcoin Verde. This addition will provide a quality of life improvement for Bitcoin Verde operators interested in running their own Electron Cash wallet, while providing Electron Cash end-users additional trusted servers to connect to.</p>
+                    </div>
+                    <div class="feature" id="pool">
+                        <h3>Bitcoin Verde Mining Pool</h3>
+                        <p>Bitcoin Verde has previously created a minimally viable version of mining pool software. The goal of this phase will be to complete development of the Bitcoin Verde mining pool and provide our software to the BCH mining community. To reduce development time, it is our intention to utilize the current MVP and make large quality of life improvements to its current state.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="clearfix" id="complete">
+            <h2>Complete Features</h2>
+        </section>
+
+        <section class="clearfix" id="block-temp">
+            <div class="about-section">
+                <h2>Block Template Validation Service - The BitBalancer</h2>
+                <p>This block template validation service is a reverse-proxy/load balancer used to reduce the risk of miners creating an invalid block to near-zero.  This is achieved by first validating the template block against other implementations before any work is performed on the block template.</p>
+                <h3>How it works</h3>
+                <ol>
+                    <li>
+                        <p>A service is created that is connected to the latest version of multiple node implementations ("validating nodes"):</p>
+                        <ul class="nested-list">
+                            <li>BCHD</li>
+                            <li>Bitcoin Unlimited</li>
+                            <li>Bitcoin Verde</li>
+                            <li>Flowee The Hub</li>
+                        </ul>
+                    </li>
+                    <p>This service accepts a standard block template from getblocktemplate as specified by BIP-22, BIP-23, BIP-9, and BIP-145.</p>
+                    <li>
+                        <p>Once a block template is received, the BitBalancer ensures each validating node has seen each transaction within the template block.</p>
+                        <ul class="nested-list">
+                            <li>The service then attempts to validate the template block for each implementation.</li>
+                            <li>The service then responds to the requester if any node finds the template invalid.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>A best effort attempt by the service is made to determine which transaction(s) trigger the invalid state of the template block-- with the invalid transactions identitified, the requester may choose to omit them.</p>
+                    </li>
+                    <li>
+                        <p>The validating nodes may not be equipped to validate a template block. This solution will:</p>
+                        <ul class="nested-list">
+                            <li>Define a formal BIP to extend getblocktemplate to allow its proposal mode to allow a flag to ignore the proof of work validation for the block data.</li>
+                            <li>Create a reference implementation and pull request for BCHN that fulfills the above extension to getblocktemplate.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p>Providing an implementation for BCHN due to its current majority market share.</p>
+                        <ul class="nested-list">
+                            <li>If other implementations provide similar required functionality without directly using getblocktemplate then this issue may be later extended to create a compatibility shim(s) for those implementations.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="clearfix" id="non-indexing">
+            <div class="about-section">
+                <h2>Non-Indexing Module</h2>
+                <p>Despite being useful for explorers and wallet services, Bitcoin Verde's indexing provided signifcant drawbacks for validation services and no added value for mining nodes.  In order to stay competitive, we have developed a non-indexed module of the Bitcoin Verde full-node.</p>
+                <h3>Changes to Bitcoin Verde</h3>
+                <p>With <i>cacheBlocks</i>, blocks are stored serialized on-disk. Many of the transaction-, address-, and slp-related SQL tables have been removed.</p>
+                <ol>
+                    <li>A new transactions table has been created with columns that can be used to point to the location on disk where the transaction's block is stored, and an offset of where the transaction is within the block flat file.</li>
+                    <li>To keep mempool/unconfirmed-transaction logic consistent between modules, the former transaction_* tables has been renamed and reused for unconfirmed transactions.</li>
+                    <li>As transactions are mined in a block they are removed from the unconfirmed_transactions_* table, and will only be stored in block flat files.</li>
+                    <li>Total transaction size and fee amount have been added to the transaction table to improve block template generation.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="clearfix" id="memo">
+            <div class="about-section">
+                <h2>Bitcoin Verde Explorer: Memo Support Added</h2>
+                <p>Fully supporting the SLP and Memo actions taken by users provides viable redundancy for other block explorers as well as increases the choice of platform for users and those running their own block explorer.</p>
+                <h3>Changes made to the Bitcoin Verde explorer:</h3>
+                <ul>
+                    <li>Bitcoin Verde has been extended to parse Memo protocol transactions.</li>
+                    <li>Memo transactions are indexed by the node.</li>
+                    <li>A routine has been implemented to back-port the indexes for nodes that are currently synced.</li>
+                    <li>RPC calls have been updated to include Memo data, similar to the functionality provided for SLP.</li>
+                    <li>The explorer API has been updated to include transaction Memo data.</li>
+                    <li>Our explorer will now display tabulated Memo data, similar to bitcoin.com.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="clearfix" id="testnet">
+            <div class="about-section">
+                <h2>Testnet Configuration Implemented</h2>
+                <p>Bitcoin Verde is now configured to connect to testnet. Connecting to testnet increases our implementation's exposure to edge-case transactions as well as significantly improves our ability to coordinate with other node implementations for hard-fork testing.</p>
+            </div>
+        </section>
+
+        <section class="clearfix" id="footer">
+            <div class="social">
+                <a href="https://www.facebook.com/softwareverde/"><i class="fa fa-facebook"></i></a>
+                <a href="https://twitter.com/softwareverde"><i class="fa fa-twitter"></i></a>
+                <a href="mailto:bitcoin-verde@softwareverde.com"><i class="fa fa-envelope"></i></a>
+                <a href="https://github.com/softwareverde/bitcoin-verde"><i class="fa fa-github"></i></a>
+                <a href="https://www.instagram.com/softwareverdellc/"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/company/software-verde-llc/"><i class="fa fa-linkedin"></i></a>
+            </div>
+            <p id="bch-address">
+                <a href="bitcoincash:qqverdefl9xtryyx8y52m6va5j8s2s4eq59fjdn97e"><span class="label">bitcoincash:</span>qq<mark>verde</mark>fl9xtryyx8y52m6va5j8s2s4eq59fjd<mark>n97e</mark></a>
+            </p>
+            <p>
+                Copyright &copy; 2011-2020 Software Verde, LLC &mdash; All rights reserved.
+            </p>
+        </section>
+
+        <script src="/js/http.js"></script>
+        <script src="/js/libauth.js"></script>
+        <script src="/js/monetize.js"></script>
+    </body>
+</html>

@@ -1,11 +1,138 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+        <link rel="icon" type="image/png" sizes="32x32" monetize-href="/img/icon-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" monetize-href="/img/icon-16.png" />
+        <link rel="shortcut icon" type="image/png" sizes="32x32" monetize-href="/img/icon-32.png" />
+        <link rel="shortcut icon" type="image/png" sizes="16x16" monetize-href="/img/icon-16.png" />
+
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link rel="stylesheet" monetize-href="/css/main.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400&display=swap" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" />
+        <script monetize-src="/js/main.js"></script>
+
+        <title>Bitcoin Verde</title>
+    </head>
+    <body>
+        <nav id="navigation">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#mission">Mission</a></li>
+                <li><a href="#explorer">Explorer</a></li>
+                <li><a monetize-href="/about.html">Goals</a></li>
+                <li><a href="#system-requirements">System Requirements</a></li>
+                <li><a href="//donate.bitcoinverde.org">Donate</a></li>
+            </ul>
+        </nav>
+        <section class="vertical-center clearfix" id="home">
+            <div class="fadeinup">
+                <h1>Bitcoin Verde</h1>
+                <img monetize-src="/img/logo-dark-banner.png" />
+                <h2>Become part of the best <span class="no-break">peer-to-peer</span> electronic cash network.  Run a <span class="no-break">Bitcoin Cash</span> server today.</h2>
+            </div>
+            <div class="fadeinup">
+                <div class="button"><a href="https://github.com/softwareverde/bitcoin-verde/releases/tag/v2.2.0">Download v2.2.0</a></div>
+            </div>
+        </section>
+        <section class="clearfix" id="mission">
+            <h1>A Bitcoin Cash full-node implementation written in Java.</h1>
+
+            <div class="statement">
+                <div class="icon"><img monetize-src="/img/icon/shield.svg" /></div>
+                <h2>Robust</h2>
+                <p>Unique codebase increase security of the Bitcoin Cash network.</p>
+            </div>
+
+            <div class="statement">
+                <div class="icon"><img monetize-src="/img/icon/blocks.svg" /></div>
+                <h2>Reliable and Stable</h2>
+                <p>Fault tolerant and well tested.</p>
+            </div>
+
+            <div class="statement">
+                <div class="icon"><img monetize-src="/img/icon/pickaxe.svg" /></div>
+                <h2>For Miners &amp; Peers</h2>
+                <p>Suitable for mining and for network validation.</p>
+            </div>
+
+            <div class="statement">
+                <div class="icon"><img monetize-src="/img/icon/speed.svg" /></div>
+                <h2>Multithreaded Performance</h2>
+                <p>Supports over 200 transactions per second.</p>
+            </div>
+        </section>
+        <section class="clearfix" id="about">
+            <div class="group-info">
+                <h2>Our Group</h2>
+                <p>Bitcoin Verde is a ground-up build written in Java and maintained by the Software Verde, LLC development team. Software Verde is a custom software development company from Columbus, Ohio dedicated to developing innovative technology that serves their community, clients, and friends.</p>
+                <p>Bitcoin Verde provides the BCH network with a full-node implementation, a block explorer, and development library. Our ambitions for the future are to continue to make improvements to our implementation and eventually provide wallet and mining-pool modules.</p>
+                <p>Our team is primarily composed of Josh Green, Andrew Groot, Eliot Lesar, and John Jamiel.</p>
+            </div>
+            <div class="call-out">
+                <p>Bitcoin Verde is an open-source project supported by our community. Ask questions about running a node or get to know the team on the <a href="https://t.me/bitcoinverde">Community Telegram</a>.</p>
+            </div>
+        </section>
+
+        <section class="clearfix" id="explorer">
+            <h1>Built-In SLP-Enabled Explorer</h1>
+            <img monetize-src="/img/explorer.png" />
+            <div class="right-text">
+                <p>Bitcoin Verde's bundled explorer is integrated directly into the node&mdash;no other software needed.</p>
+                <p>The integrated indexer is compact and fast, engineered to keep pace with network's most rapid traffic.</p>
+                <p class="emphasis">View a live version at <a href="//explorer.bitcoinverde.org">explorer.bitcoinverde.org</a>.</p>
+            </div>
+        </section>
+        <section class="clearfix" id="system-requirements">
+            <div class="sys-features" style="display: none;">
+                <h2>Technical Features</h2>
+                <div class="tech-list">
+                    <ul>
+                        <li>
+                            <a href="javascript:void();" onclick="toggleVisibility('api');">Advanced API</a>
+                            <p id="api">The Advanced API makes it possible to run much richer queries that would otherwise be difficult with JSON-RPC-based Nodes.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div  class="sys-features">
+                <h2>Default System Requirements</h2>
+                <ul>
+                    <li>2 vCPU</li>
+                    <li>6 GB Memory</li>
+                    <li>300 GB SSD</li>
+                    <li>Linux OS</li>
+                    <li>Java 11</li>
+                    <li>1 Mbps Connection</li>
+                </ul>
+                <p>System specs satisfy the default configuration of the latest release.</p>
+            </div>
+        </section>
+        <section class="clearfix" id="footer">
+            <div class="social">
+                <a href="https://www.facebook.com/softwareverde/"><i class="fa fa-facebook"></i></a>
+                <a href="https://twitter.com/softwareverde"><i class="fa fa-twitter"></i></a>
+                <a href="mailto:bitcoin-verde@softwareverde.com"><i class="fa fa-envelope"></i></a>
+                <a href="https://github.com/softwareverde/bitcoin-verde"><i class="fa fa-github"></i></a>
+                <a href="https://www.instagram.com/softwareverdellc/"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/company/software-verde-llc/"><i class="fa fa-linkedin"></i></a>
+            </div>
+            <p id="bch-address">
+                <a href="bitcoincash:qqverdefl9xtryyx8y52m6va5j8s2s4eq59fjdn97e"><span class="label">bitcoincash:</span>qq<mark>verde</mark>fl9xtryyx8y52m6va5j8s2s4eq59fjd<mark>n97e</mark></a>
+            </p>
+            <p>
+                Copyright &copy; 2011-2020 Software Verde, LLC &mdash; All rights reserved.
+            </p>
+        </section>
+
         <script src="/js/http.js"></script>
         <script src="/js/libauth.js"></script>
         <script src="/js/monetize.js"></script>
-    </head>
-    <body>
-        <script src="/js/main.js"></script>
     </body>
 </html>

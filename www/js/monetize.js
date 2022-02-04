@@ -62,6 +62,11 @@
         const didOverflow = (carry > 0);
         return didOverflow;
     };
+    byteUtil.initializeToRandom = function(byteArray) {
+        for (let i = 0; i < byteArray.length; i += 1) {
+            byteArray[i] = (Math.random() * 256);
+        }
+    };
 
     const hashTransaction = function(transactionBytes) {
         let bytes = hashUtil.sha256(transactionBytes);
@@ -123,9 +128,14 @@
         const blockDifficulty = byteUtil.reverseEndian(hexUtil.hexStringToByteArray(minerNotify[6]));
         const blockTimestampLe = byteUtil.reverseEndian(hexUtil.hexStringToByteArray(minerNotify[7]));
 
-        const blockNonce = new Uint8Array(4);
         const extraNonce = hexUtil.hexStringToByteArray(subscription.extraNonce);
+
+        const blockNonce = new Uint8Array(4);
         const extraNonce2 = new Uint8Array(subscription.extraNonce2ByteCount);
+
+        byteUtil.initializeToRandom(blockNonce);
+        byteUtil.initializeToRandom(extraNonce2);
+        extraNonce2[0] = 0; // Ensure there is at least half of the extraNonce2 available to increment to prevent quickly overflowing the value due to an unfortunate seed.
 
         const calculateMerkleRoot = function(extraNonce2) {
             const coinbaseTransactionBytes = byteUtil.concatenateBytes(coinbaseHead, extraNonce, extraNonce2, coinbaseTail);

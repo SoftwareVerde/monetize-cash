@@ -1,6 +1,7 @@
 package com.softwareverde.monetize;
 
 import com.softwareverde.bitcoin.server.configuration.StratumProperties;
+import com.softwareverde.logging.LineNumberAnnotatedLog;
 import com.softwareverde.monetize.configuration.Configuration;
 import com.softwareverde.monetize.configuration.ServerProperties;
 import com.softwareverde.logging.LogLevel;
@@ -33,7 +34,7 @@ public class Main {
     }
 
     public static void main(final String[] commandLineArguments) {
-        Logger.setLog(AnnotatedLog.getInstance());
+        Logger.setLog(LineNumberAnnotatedLog.getInstance());
         Logger.setLogLevel(LogLevel.ON);
         Logger.setLogLevel("com.softwareverde.util", LogLevel.ERROR);
         Logger.setLogLevel("com.softwareverde.bitcoin.rpc.BitcoinVerdeRpcConnector", LogLevel.WARN);

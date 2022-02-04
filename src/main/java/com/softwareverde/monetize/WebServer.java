@@ -2,7 +2,6 @@ package com.softwareverde.monetize;
 
 import com.softwareverde.bitcoin.CoreInflater;
 import com.softwareverde.bitcoin.address.Address;
-import com.softwareverde.bitcoin.address.AddressInflater;
 import com.softwareverde.bitcoin.server.configuration.StratumProperties;
 import com.softwareverde.bitcoin.server.module.stratum.BitcoinCoreStratumServer;
 import com.softwareverde.bitcoin.server.module.stratum.BitcoinVerdeStratumServer;
@@ -60,7 +59,7 @@ public class WebServer {
 
         _threadPool = new CachedThreadPool(12, 30000L);
         _stratumServer = new BitcoinVerdeStratumServer(stratumProperties, _threadPool, new CoreInflater(), null);
-        _coinbaseAddress = (new AddressInflater()).fromBase32Check("qqverdefl9xtryyx8y52m6va5j8s2s4eq59fjdn97e");
+        _coinbaseAddress = serverProperties.getCoinbaseAddress();
     }
 
     public void start() {

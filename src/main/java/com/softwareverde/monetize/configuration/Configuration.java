@@ -1,8 +1,8 @@
 package com.softwareverde.monetize.configuration;
 
+import com.softwareverde.bitcoin.address.AddressInflater;
 import com.softwareverde.bitcoin.server.configuration.StratumProperties;
 import com.softwareverde.bitcoin.server.configuration.StratumPropertiesLoader;
-import com.softwareverde.database.properties.DatabaseCredentials;
 import com.softwareverde.util.Util;
 
 import java.io.File;
@@ -12,20 +12,8 @@ import java.util.Properties;
 
 public class Configuration {
     protected final Properties _properties;
-    protected DatabaseProperties _databaseProperties;
     protected ServerProperties _serverProperties;
     protected StratumProperties _stratumProperties;
-
-    protected void _loadDatabaseProperties() {
-        _databaseProperties = new DatabaseProperties();
-        _databaseProperties._hostname = _properties.getProperty("database.url", "");
-        _databaseProperties._schema = _properties.getProperty("database.schema", "");
-        _databaseProperties._port =  Util.parseInt(_properties.getProperty("database.port", ""));
-
-        final String username = _properties.getProperty("database.username", "");
-        final String password = _properties.getProperty("database.password", "");
-        _databaseProperties._databaseCredentials = new DatabaseCredentials(username, password);
-    }
 
     protected void _loadServerProperties() {
         _serverProperties = new ServerProperties();
@@ -35,6 +23,10 @@ public class Configuration {
         _serverProperties._socketPort = Util.parseInt(_properties.getProperty("server.socketPort", "444"));
         _serverProperties._tlsCertificateFile = _properties.getProperty("server.tlsCertificateFile", "");
         _serverProperties._tlsKeyFile = _properties.getProperty("server.tlsKeyFile", "");
+
+        final AddressInflater addressInflater = new AddressInflater();
+        final String addressString = _properties.getProperty("server.coinbaseAddress", "");
+        _serverProperties._coinbaseAddress = Util.coalesce(addressInflater.fromBase32Check(addressString), addressInflater.fromBase58Check(addressString));
     }
 
     protected void _loadStratumProperties() {
@@ -49,14 +41,11 @@ public class Configuration {
         }
         catch (final IOException exception) { }
 
-        _loadDatabaseProperties();
-
         _loadServerProperties();
 
         _loadStratumProperties();
     }
 
-    public DatabaseProperties getDatabaseProperties() { return _databaseProperties; }
     public ServerProperties getServerProperties() { return _serverProperties; }
     public StratumProperties getStratumProperties() { return _stratumProperties; }
 }
